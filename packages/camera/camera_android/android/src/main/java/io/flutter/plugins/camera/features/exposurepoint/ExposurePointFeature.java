@@ -67,42 +67,22 @@ public class ExposurePointFeature extends CameraFeature<Point> {
     return supportedRegions != null && supportedRegions > 0;
   }
 
-  /////////////////////////////////////////////////////////////////////////////////////////////////
-  private MeteringRectangle[] defaultExposureRectangle;
-
-  private boolean shouldReset(CaptureRequest.Builder requestBuilder) {
-    MeteringRectangle[] currentRectangles = requestBuilder.get(CaptureRequest.CONTROL_AE_REGIONS);
-    return !Arrays.equals(currentRectangles, defaultExposureRectangle);
-  }
-
   @Override
   public void updateBuilder(CaptureRequest.Builder requestBuilder) {
+    // if (!checkIsSupported()) {
+    //   return;
+    // }
+    // requestBuilder.set(
+    //     CaptureRequest.CONTROL_AE_REGIONS,
+    //     exposureRectangle == null ? null : new MeteringRectangle[] {exposureRectangle});
     if (!checkIsSupported()) {
       return;
     }
-
-    if (defaultExposureRectangle == null) {
-      defaultExposureRectangle = requestBuilder.get(CaptureRequest.CONTROL_AE_REGIONS);
+    if (exposureRectangle == null) {
+      return;
     }
-
-    MeteringRectangle newRectangle = exposureRectangle;
-
-    if (newRectangle != null) {
-      requestBuilder.set(CaptureRequest.CONTROL_AE_REGIONS, new MeteringRectangle[] {newRectangle});
-    } else if (shouldReset(requestBuilder)) {
-      requestBuilder.set(CaptureRequest.CONTROL_AE_REGIONS, defaultExposureRectangle);
-    }
+    requestBuilder.set(CaptureRequest.CONTROL_AE_REGIONS, new MeteringRectangle[] {exposureRectangle});
   }
-
-  // @Override
-  // public void updateBuilder(CaptureRequest.Builder requestBuilder) {
-  //   if (!checkIsSupported()) {
-  //     return;
-  //   }
-  //   requestBuilder.set(
-  //       CaptureRequest.CONTROL_AE_REGIONS,
-  //       exposureRectangle == null ? null : new MeteringRectangle[] {exposureRectangle});
-  // }
 
   private void buildExposureRectangle() {
     if (this.cameraBoundaries == null) {
