@@ -68,48 +68,48 @@ public class ExposurePointFeature extends CameraFeature<Point> {
   }
 
   /////////////////////////////
-  private MeteringRectangle[] defaultExposureRectangle;
+  // private MeteringRectangle[] defaultExposureRectangle;
 
-  private boolean shouldReset(CaptureRequest.Builder requestBuilder) {
-    MeteringRectangle[] currentRectangles = requestBuilder.get(CaptureRequest.CONTROL_AE_REGIONS);
-    return !Arrays.equals(currentRectangles, defaultExposureRectangle);
-  }
-
-  @Override
-  public void updateBuilder(CaptureRequest.Builder requestBuilder) {
-    if (!checkIsSupported()) {
-      return;
-    }
-
-    if (defaultExposureRectangle == null) {
-      defaultExposureRectangle = requestBuilder.get(CaptureRequest.CONTROL_AE_REGIONS);
-    }
-
-    MeteringRectangle newRectangle = exposureRectangle;
-
-    if (newRectangle != null) {
-      requestBuilder.set(CaptureRequest.CONTROL_AE_REGIONS, new MeteringRectangle[] {newRectangle});
-    } else if (shouldReset(requestBuilder)) {
-      requestBuilder.set(CaptureRequest.CONTROL_AE_REGIONS, defaultExposureRectangle);
-    }
-  }
+  // private boolean shouldReset(CaptureRequest.Builder requestBuilder) {
+  //   MeteringRectangle[] currentRectangles = requestBuilder.get(CaptureRequest.CONTROL_AE_REGIONS);
+  //   return !Arrays.equals(currentRectangles, defaultExposureRectangle);
+  // }
 
   // @Override
   // public void updateBuilder(CaptureRequest.Builder requestBuilder) {
-  //   // if (!checkIsSupported()) {
-  //   //   return;
-  //   // }
-  //   // requestBuilder.set(
-  //   //     CaptureRequest.CONTROL_AE_REGIONS,
-  //   //     exposureRectangle == null ? null : new MeteringRectangle[] {exposureRectangle});
   //   if (!checkIsSupported()) {
   //     return;
   //   }
-  //   if (exposureRectangle == null) {
-  //     return;
+
+  //   if (defaultExposureRectangle == null) {
+  //     defaultExposureRectangle = requestBuilder.get(CaptureRequest.CONTROL_AE_REGIONS);
   //   }
-  //   requestBuilder.set(CaptureRequest.CONTROL_AE_REGIONS, new MeteringRectangle[] {exposureRectangle});
+
+  //   MeteringRectangle newRectangle = exposureRectangle;
+
+  //   if (newRectangle != null) {
+  //     requestBuilder.set(CaptureRequest.CONTROL_AE_REGIONS, new MeteringRectangle[] {newRectangle});
+  //   } else if (shouldReset(requestBuilder)) {
+  //     requestBuilder.set(CaptureRequest.CONTROL_AE_REGIONS, defaultExposureRectangle);
+  //   }
   // }
+
+  @Override
+  public void updateBuilder(CaptureRequest.Builder requestBuilder) {
+    // if (!checkIsSupported()) {
+    //   return;
+    // }
+    // requestBuilder.set(
+    //     CaptureRequest.CONTROL_AE_REGIONS,
+    //     exposureRectangle == null ? null : new MeteringRectangle[] {exposureRectangle});
+    if (!checkIsSupported()) {
+      return;
+    }
+    if (exposureRectangle == null) {
+      return;
+    }
+    requestBuilder.set(CaptureRequest.CONTROL_AE_REGIONS, new MeteringRectangle[] {exposureRectangle});
+  }
 
   private void buildExposureRectangle() {
     if (this.cameraBoundaries == null) {
